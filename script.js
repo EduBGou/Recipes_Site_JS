@@ -5,6 +5,7 @@ const startTimer = document.querySelector("#start-timer");
 
 let recipes = []
 let timerInSecs = 5;
+let intervalId = null;
 
 class Recipe {
     constructor(paramName, paramIngredients) {
@@ -45,9 +46,28 @@ allIngredientesInput.forEach(i => {
     });
 });
 
-const timeout = () => {
+const countdown = () => {
+    if (timerInSecs <= 0) {
+        resetTimer();
+        alert("The Timer Timeout");
+        return;
+    }
+    initiateOrStopTimer();
     timerInSecs -= 1;
     console.log(timerInSecs);
 }
 
-startTimer.addEventListener("click", timeout);
+startTimer.addEventListener("click", initiateOrStopTimer);
+
+function initiateOrStopTimer() {
+    if (intervalId) {
+        resetTimer();
+        return;
+    }
+    intervalId = setInterval(countdown, 1000)
+}
+
+function resetTimer() {
+    clearInterval(intervalId);
+    intervalId = null;
+}
